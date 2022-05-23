@@ -6,17 +6,13 @@ from passlib.hash import sha256_crypt
 import secrets
 
 def mygensalt(length):
-
     ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     salt = []
     for i in range (length):
-
         salt.append(secrets.choice(ALPHABET))
-
     return "".join(salt)
 
 User_fields = {
-
     'user_id': fields.Integer,
     'user_login': fields.String,
     'user_hash': fields.String,
@@ -34,7 +30,6 @@ user_post_args.add_argument("user_password", type = str, \
     help = "User login is  missing!", required = True)
 
 class User_table(db.Model):
-
     user_id = db.Column(db.Integer, primary_key = True, \
         autoincrement = True, nullable = False)
     user_login = db.Column(db.String(25), nullable = False, unique = True)
@@ -46,20 +41,17 @@ class User_table(db.Model):
         default = func.now(), nullable = False)
 
     def __repr__(self):
-
         return f"User(id = {self.user_id}, \
             login = {self.user_login}, last updated = {self.last_modification},\
             created = {self.creation_date})"
 
 class User(Resource):
-
     @marshal_with(User_fields)
     def get(self):
         return ''
 
     @marshal_with(User_fields)
     def post(self):
-
         args = user_post_args.parse_args()
         salt = mygensalt(16)
         hash = sha256_crypt.encrypt(args['user_password'], salt = salt, rounds = 535000)
